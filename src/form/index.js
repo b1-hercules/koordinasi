@@ -66,7 +66,7 @@ const FormComponent = props => {
             id: countEmp.length + 1,
             nik: values.nik,
             name: values.name,
-            type: "New Hire",
+            type: "PROMOTION",
             positionId: values.position,
             divisionId: values.division,
             lastPosition: null,
@@ -82,9 +82,9 @@ const FormComponent = props => {
                         message: 'Success',
                         description: "Save berhasil"
                     })
-                    // setTimeout(function () {
-                    //     history.push('/')
-                    // }, 2000);
+                    setTimeout(function () {
+                        history.push('/')
+                    }, 2000);
                     console.log('empdata',countEmp);
                 } else {
                     notification.error({
