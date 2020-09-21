@@ -66,21 +66,15 @@ const FormComponent = props => {
             id: countEmp.length + 1,
             nik: values.nik,
             name: values.name,
-            type: "PROMOTION",
+            type: "New Hire",
             positionId: values.position,
             divisionId: values.division,
             lastPosition: null,
-            //     id: 21,
-            //     nik: "EM00021",
-            //     name: "iqbalss",
-            //     type: "PROMOTION",
-            //     positionId: 2,
-            //     divisionId: 2,
-            //     lastPosition: null,
-            //     createdDate: "2020-09-19T04:16:04.040Z"
         }
 
-        axios.post(`${URL}/employees`, {tempBody})
+        console.log('temp',tempBody)
+
+        axios.post(`${URL}/employees`, tempBody)
             .then(res => {
                 if (res.status === 200) {
                     notification.success({
@@ -88,9 +82,10 @@ const FormComponent = props => {
                         message: 'Success',
                         description: "Save berhasil"
                     })
-                    setTimeout(function () {
-                        history.push('/')
-                    }, 2000);
+                    // setTimeout(function () {
+                    //     history.push('/')
+                    // }, 2000);
+                    console.log('empdata',countEmp);
                 } else {
                     notification.error({
                         placement: 'TopRight',
