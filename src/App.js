@@ -10,7 +10,8 @@ const App = () => {
 
     const [empData, setEmpData] = useState([]);
 
-    const URL = `http://25.22.95.51:9010/main`;
+    //const URL = `http://25.22.95.51:9010/main`; API kang andi
+    const URL = `https://spring-boot-angular6.herokuapp.com/main`
 
     const getDataEmployee = () => {
 

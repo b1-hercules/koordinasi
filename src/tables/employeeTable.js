@@ -42,7 +42,7 @@ class EmployeeTable extends Component {
     };
 
     deleteData = (id) => {
-        axios.delete(`http://25.22.95.51:9010/main/employees/${id}`)
+        axios.delete(`https://spring-boot-angular6.herokuapp.com/main/employees/${id}`)
             .then(res => {
                 if (res.status === 200) {
                     notification.success({

@@ -14,7 +14,8 @@ const FormComponent = props => {
     const [dataPosition, setDataPosition] = useState([]);
     const [countEmp, setCountEmp] = useState([]);
 
-    const URL = `http://25.22.95.51:9010/main`;
+    //const URL = `http://25.22.95.51:9010/main`; API kang andi
+    const URL = `https://spring-boot-angular6.herokuapp.com/main`
 
     const getDataInit = () => {
         axios.get(`${URL}/positions`)
@@ -62,23 +63,22 @@ const FormComponent = props => {
 
     const onFinish = (values) => {
         const tempBody = {
-            // id: countEmp.length + 1,
-            // nik: values.nik,
-            // name: values.name,
-            // type: "PROMOTION",
-            // positionId: values.position,
-            // divisionId: values.division,
-            // lastPosition: null,
-                id: 21,
-                nik: "EM00021",
-                name: "iqbalss",
-                type: "PROMOTION",
-                positionId: 2,
-                divisionId: 2,
-                lastPosition: null,
-                createdDate: "2020-09-19T04:16:04.040Z"
+            id: countEmp.length + 1,
+            nik: values.nik,
+            name: values.name,
+            type: "PROMOTION",
+            positionId: values.position,
+            divisionId: values.division,
+            lastPosition: null,
+            //     id: 21,
+            //     nik: "EM00021",
+            //     name: "iqbalss",
+            //     type: "PROMOTION",
+            //     positionId: 2,
+            //     divisionId: 2,
+            //     lastPosition: null,
+            //     createdDate: "2020-09-19T04:16:04.040Z"
         }
-        console.log(tempBody)
 
         axios.post(`${URL}/employees`, {tempBody})
             .then(res => {
@@ -88,9 +88,9 @@ const FormComponent = props => {
                         message: 'Success',
                         description: "Save berhasil"
                     })
-                    // setTimeout(function () {
-                    //     window.location.reload(false);
-                    // }, 2000);
+                    setTimeout(function () {
+                        history.push('/')
+                    }, 2000);
                 } else {
                     notification.error({
                         placement: 'TopRight',
