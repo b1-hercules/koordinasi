@@ -55,10 +55,23 @@ const FormComponent = props => {
         });
     }
 
+    const handleFormEdit = () => {
+        form.setFieldsValue({
+            nik: props.location.dataRecord.nik,
+            name: props.location.dataRecord.name,
+            division: props.location.dataRecord.division,
+            position: props.location.dataRecord.position,
+        });
+    }
+
     useEffect(() => {
+        if (props.location.dataRecord.form === 'edit') {
+            handleFormEdit();
+        } else {
+            handleNik();
+        }
         getDataInit();
         forceUpdate({});
-        handleNik();
     }, [countEmp.length]);
 
     const onFinish = (values) => {

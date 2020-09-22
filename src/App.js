@@ -5,6 +5,7 @@ import axios from 'axios';
 import {Button, Card} from "antd";
 import history from "./history";
 import Header from "./header";
+import {Link} from "react-router-dom";
 
 const App = () => {
 
@@ -34,9 +35,16 @@ const App = () => {
                     <EmployeeTable datum={empData}/>
                     <Button
                         type="primary"
-                        onClick={() => history.push('/form')}
                     >
-                        Add an Employee
+                        <Link to={{
+                            pathname:`/form`,
+                            dataRecord : {
+                                form : 'add',
+                            }
+                        }}
+                        >
+                            Add an Employee
+                        </Link>
                     </Button>
                 </Card>
             </div>

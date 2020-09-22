@@ -4,6 +4,7 @@ import './index.css'
 import {Button, notification, Space, Table,} from "antd";
 import Text from "antd/es/typography/Text";
 import axios from 'axios'
+import {Link} from "react-router-dom";
 
 class EmployeeTable extends Component {
     constructor(props) {
@@ -13,7 +14,6 @@ class EmployeeTable extends Component {
             data: [],
             loading: false,
             sortedInfo: null,
-            total: 25,
         };
     }
 
@@ -31,7 +31,10 @@ class EmployeeTable extends Component {
                     lastPosition: res.lastPosition,
                     createDate: Moment(res.createDate).format('MMM DD, YYYY'),
                 }
-            })
+            }),
+            pagination : {
+                total : this.props.datum.length,
+            }
         })
     }
 
@@ -46,9 +49,9 @@ class EmployeeTable extends Component {
             .then(res => {
                 if (res.status === 200) {
                     notification.success({
-                        placement: 'TopRight',
                         message: 'Success',
-                        description: "hapus berhasil"
+                        description: "hapus berhasil",
+                        placement: 'TopRight',
                     })
                     setTimeout(function() {
                         window.location.reload(false);
@@ -158,7 +161,21 @@ class EmployeeTable extends Component {
                 key: 'x',
                 render: (text, record) => (
                     <Space size="middle">
-                        <Button type="primary" onClick={() => console.log(record)}>Edit</Button>
+                        <Button type="primary">
+                            <Link to={{
+                                pathname:`/form/${record.id}`,
+                                dataRecord : {
+                                    form : 'edit',
+                                    nik: record.nik,
+                                    name: record.name,
+                                    division: record.division,
+                                    position: record.position
+                                }
+                            }}
+                            >
+                                Edit
+                            </Link>
+                        </Button>
                         <Button type="primary" onClick={() => {
                             if (window.confirm('Are you sure to delete this record?')) {
                                 this.deleteData(record.id)
@@ -189,7 +206,13 @@ class EmployeeTable extends Component {
                     dataSource={dataSource}
                     columns={columns}
                     onChange={this.handleChange}
-                    pagination={{pageSize: 5, position: ['bottomLeft']}}
+                    pagination={{
+                        defaultCurrent: 1,
+                        defaultPageSize: 5,
+                        total: this.props.datum.length,
+                        pageSizeOptions: ['5', '10', '25'],
+                        showSizeChanger: true,
+                    }}
                 />
         )
     }
