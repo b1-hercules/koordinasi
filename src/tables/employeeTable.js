@@ -5,6 +5,7 @@ import {Button, notification, Space, Table,} from "antd";
 import Text from "antd/es/typography/Text";
 import axios from 'axios'
 import {Link} from "react-router-dom";
+import history from "../history";
 
 class EmployeeTable extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class EmployeeTable extends Component {
             data: [],
             loading: false,
             sortedInfo: null,
+            total: this.props.datum.length,
         };
     }
 
@@ -31,10 +33,7 @@ class EmployeeTable extends Component {
                     lastPosition: res.lastPosition,
                     createDate: Moment(res.createDate).format('MMM DD, YYYY'),
                 }
-            }),
-            pagination : {
-                total : this.props.datum.length,
-            }
+            })
         })
     }
 
@@ -45,7 +44,8 @@ class EmployeeTable extends Component {
     };
 
     deleteData = (id) => {
-        axios.delete(`https://spring-boot-angular6.herokuapp.com/main/employees/${id}`)
+        //axios.delete(`https://spring-boot-angular6.herokuapp.com/main/employees/${id}`)
+        axios.delete(`http://25.22.95.51:9010/main/employees/${id}`)
             .then(res => {
                 if (res.status === 200) {
                     notification.success({
@@ -53,8 +53,8 @@ class EmployeeTable extends Component {
                         description: "hapus berhasil",
                         placement: 'TopRight',
                     })
-                    setTimeout(function() {
-                        window.location.reload(false);
+                    setTimeout(function () {
+                        history.push('/')
                     }, 2000);
                 } else {
                     notification.error({
@@ -166,6 +166,7 @@ class EmployeeTable extends Component {
                                 pathname:`/form/${record.id}`,
                                 dataRecord : {
                                     form : 'edit',
+                                    id: record.id,
                                     nik: record.nik,
                                     name: record.name,
                                     division: record.division,
@@ -202,6 +203,7 @@ class EmployeeTable extends Component {
         })
 
         return (
+            <div>
                 <Table
                     dataSource={dataSource}
                     columns={columns}
@@ -214,6 +216,7 @@ class EmployeeTable extends Component {
                         showSizeChanger: true,
                     }}
                 />
+            </div>
         )
     }
 }

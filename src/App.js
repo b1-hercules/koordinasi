@@ -3,7 +3,6 @@ import './App.css';
 import EmployeeTable from './tables/employeeTable'
 import axios from 'axios';
 import {Button, Card} from "antd";
-import history from "./history";
 import Header from "./header";
 import {Link} from "react-router-dom";
 
@@ -11,8 +10,8 @@ const App = () => {
 
     const [empData, setEmpData] = useState([]);
 
-    //const URL = `http://25.22.95.51:9010/main`; API kang andi
-    const URL = `https://spring-boot-angular6.herokuapp.com/main`
+    const URL = `http://25.22.95.51:9010/main`; //API kang andi
+    //const URL = `https://spring-boot-angular6.herokuapp.com/main`
 
     const getDataEmployee = () => {
 

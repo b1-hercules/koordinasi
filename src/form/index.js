@@ -6,6 +6,12 @@ import history from "../history";
 
 const {Option} = Select;
 
+if (window.performance) {
+    if ( performance.navigation.type === 1) {
+            history.push('/')
+    }
+}
+
 const FormComponent = props => {
     const [form] = Form.useForm();
     const [, forceUpdate] = useState();
@@ -13,9 +19,15 @@ const FormComponent = props => {
     const [dataDivision, setDataDivision] = useState([]);
     const [dataPosition, setDataPosition] = useState([]);
     const [countEmp, setCountEmp] = useState([]);
+    // const [formType, setFormType] = useState('');
+    // const [tempId, settempId] = useState('');
+    // const [tempName, setTempName] = useState('');
+    // const [tempNik, setTempNik] = useState('');
+    // const [tempPos, setTempPos] = useState('');
+    // const [tempDiv, setTempDiv] = useState('');
 
-    //const URL = `http://25.22.95.51:9010/main`; API kang andi
-    const URL = `https://spring-boot-angular6.herokuapp.com/main`
+    const URL = `http://25.22.95.51:9010/main`; // API kang andi
+    //const URL = `https://spring-boot-angular6.herokuapp.com/main`
 
     const getDataInit = () => {
         axios.get(`${URL}/positions`)
@@ -50,8 +62,9 @@ const FormComponent = props => {
     })
 
     const handleNik = () => {
+        let watcherId = Math.max(...countEmp.map(s => s.id))
         form.setFieldsValue({
-            nik: `EM000${countEmp.length + 1}`,
+            nik: `EM000${watcherId + 1}`,
         });
     }
 
@@ -64,49 +77,78 @@ const FormComponent = props => {
         });
     }
 
+    // const initialProps = () => {
+    //     setFormType(props.location.dataRecord.form)
+    //     settempId()
+    // }
+
     useEffect(() => {
+        getDataInit();
         if (props.location.dataRecord.form === 'edit') {
             handleFormEdit();
-        } else {
+        } else if (props.location.dataRecord.form === 'add'){
             handleNik();
         }
-        getDataInit();
         forceUpdate({});
     }, [countEmp.length]);
 
-    const onFinish = (values) => {
-        const tempBody = {
-            id: countEmp.length + 1,
-            nik: values.nik,
-            name: values.name,
-            type: "PROMOTION",
-            positionId: values.position,
-            divisionId: values.division,
-            lastPosition: null,
+    const onFinishAdd = (values) => {
+        if (props.location.dataRecord.form !== 'edit') {
+            const tempBody = {
+                name: values.name,
+                positionId: values.position,
+                divisionId: values.division,
+                lastPosition: null,
+            }
+            axios.post(`${URL}/employees`, tempBody)
+                .then(res => {
+                    if (res.status === 200) {
+                        notification.success({
+                            placement: 'TopRight',
+                            message: 'Success',
+                            description: "Save berhasil"
+                        })
+                        setTimeout(function () {
+                            history.push('/')
+                        }, 2000);
+                    } else {
+                        notification.error({
+                            placement: 'TopRight',
+                            message: 'Failed',
+                            description: "Save gagal"
+                        })
+                    }
+                })
+        } else {
+            const tempBody = {
+                id: props.location.dataRecord.id,
+                nik: values.nik,
+                name: values.name,
+                type: "PROMOTION",
+                positionId: values.position,
+                divisionId: values.division,
+                lastPosition: props.location.dataRecord.position,
+            }
+            axios.put(`${URL}/employees/${props.location.dataRecord.id}`, tempBody)
+                .then(res => {
+                    if (res.status === 200) {
+                        notification.success({
+                            placement: 'TopRight',
+                            message: 'Success',
+                            description: "Edit berhasil"
+                        })
+                        setTimeout(function () {
+                            history.push('/')
+                        }, 2000);
+                    } else {
+                        notification.error({
+                            placement: 'TopRight',
+                            message: 'Failed',
+                            description: "Edit gagal"
+                        })
+                    }
+                })
         }
-
-        console.log('temp',tempBody)
-
-        axios.post(`${URL}/employees`, tempBody)
-            .then(res => {
-                if (res.status === 200) {
-                    notification.success({
-                        placement: 'TopRight',
-                        message: 'Success',
-                        description: "Save berhasil"
-                    })
-                    setTimeout(function () {
-                        history.push('/')
-                    }, 2000);
-                    console.log('empdata',countEmp);
-                } else {
-                    notification.error({
-                        placement: 'TopRight',
-                        message: 'Failed',
-                        description: "Save gagal"
-                    })
-                }
-            })
     };
 
     return (
@@ -117,7 +159,7 @@ const FormComponent = props => {
                 <Form
                     form={form}
                     name="control-hooks"
-                    onFinish={onFinish}
+                    onFinish={onFinishAdd}
                     layout="vertical"
                 >
                     <Form.Item
